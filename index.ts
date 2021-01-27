@@ -28,13 +28,21 @@ const wait = async (n: number) => {
 };
 
 const middleWare1 = async (req: Request, res: Response, next: NextFunction) => {
-    await wait(100);
-    return next();
+    try {
+        await wait(100);
+        return next();
+    } catch(e) {
+        next(e);
+    }
 };
 
 app.get("/A", middleWare1, async (req, res, next) => {
-    await wait(150);
-    res.json({ msg: "Hello World!" });
+    try {
+        await wait(150);
+        res.json({ msg: "Hello World!" });
+    } catch(e) {
+        next(e);
+    }
 });
 
 app.listen(process.env.PORT || 3001, () => {
